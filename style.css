@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.grid-container {
+    display: grid;
+    height: 80vh;
+    grid-template-columns: 20vh 20vh 20vh 20vh; /*20vw 20vw 20vw 20vw; */
+    grid-template-rows: 20vh 20vh 20vh 20vh; /* 20vw 20vw 20vw 20vw; */
+    /* margin: 5vw; */
+    justify-content: center;
+    grid-gap: 3vh;
+    margin-top: 6vh;
+}
+
+.grid-item {
+    border: 0.3vh solid gray;
+    /* margin: 1vw; */
+    text-align: center;
+    cursor: pointer;
+    background-color: #AAFFAA;
+}
