@@ -6,19 +6,20 @@
 
 .grid-container {
     display: grid;
-    height: 80vh;
-    grid-template-columns: 20vh 20vh 20vh 20vh; /*20vw 20vw 20vw 20vw; */
-    grid-template-rows: 20vh 20vh 20vh 20vh; /* 20vw 20vw 20vw 20vw; */
+    grid-template-columns: repeat(4, 20vmin);
+    grid-template-rows: repeat(4, 20vmin);
     /* margin: 5vw; */
     justify-content: center;
-    grid-gap: 3vh;
-    margin-top: 6vh;
+    grid-gap: 3vmin;
+    margin-top: 6vmin;
 }
 
 .grid-item {
-    border: 0.3vh solid gray;
+    border: 0.3vmin solid gray;
     /* margin: 1vw; */
-    text-align: center;
+    /* text-align: center; */
+    border-radius: 1.5vmin;
     cursor: pointer;
-    background-color: #AAFFAA;
+    background-color: #111111;
+    background-size: contain;
 }
