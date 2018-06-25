@@ -20,6 +20,7 @@
     /* text-align: center; */
     border-radius: 1.5vmin;
     cursor: pointer;
-    background-color: #111111;
+    /* background-color: steelblue; */
     background-size: contain;
+    /* background: linear-gradient(-35deg, #444444, #000000); */
 }

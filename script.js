@@ -14,8 +14,8 @@ $(function () {
 
         constructor(board, tilesDivs) {
             this.board = board;
-            this.tilesDivs = tilesDivs;
-            this.cards = [];
+            this.tilesDivs = Array.from(tilesDivs);
+            this.tileBack = $(".grid-item").css("background-color");
             this.pickedPair = [];
             this.pairsClickedCounter = 0;
             this.pairsGuessedCounter = 0;
@@ -29,28 +29,41 @@ $(function () {
                 img7: "img/PNG/17.png",
                 img8: "img/PNG/18.png"
             };
-            // this.assignImages = function(tilesDivs, tiles, images) {
-            //     for (let i = 1; i < tilesDivs.length; i = i + 2) {
 
-            //         tiles.push(new Tile(tilesDivs[i], images["img" + 1]));
-            //         tiles.push(new Tile(tilesDivs[i], images["img" + 1]));
-
-            //         // this.tiles[i].image = this.images["img" + i]
-            //         // this.tiles[i + 1].image = this.images["img" + (i + 1)]
-
-            //     }
-            // }
-        }
-
-        assignImages() {
-
-            for (let i = 2; i < this.tilesDivs.length + 2; i++) {
-                this.cards.push(new Card(this.tilesDivs[i - 2], this.images["img" + Math.floor(i/2)]));
-                // $(this.tilesDivs[i-2]).css("background-image", `url(${this.cards[0].image})`);
-            }
         }
 
         newGame() {
+
+            let pickedPair = this.pickedPair;
+
+            $(".grid-item").click(function () {
+
+                $(this).css("background-image", $(this).data("image"));
+
+                pickedPair.push($(this));
+
+                if ($(pickedPair[0]).data("number") === $(this).data("number") && pickedPair.length === 2) {
+                    pickedPair.pop();
+                }
+
+                if (pickedPair.length === 2 && $(pickedPair[0]).data("image") !== $(pickedPair[1]).data("image")) {
+
+                    setTimeout(function () {
+
+                        $(pickedPair[0]).removeAttr("style");
+                        $(pickedPair[1]).removeAttr("style");
+                        pickedPair = []
+
+                    }, 250);
+
+                } else if (pickedPair.length === 2 && $(pickedPair[0]).data("image") === $(pickedPair[1]).data("image")) {
+
+                    $(pickedPair[0]).off("click");
+                    $(pickedPair[1]).off("click");
+                    pickedPair = [];
+                }
+
+            })
 
         }
 
@@ -59,13 +72,15 @@ $(function () {
             let randElem;
             let temp;
 
-            for (let lastElemIndex = this.cards.length - 1; lastElemIndex >= 0; lastElemIndex--) {
+            for (let lastElemIndex = this.tilesDivs.length - 1; lastElemIndex >= 0; lastElemIndex--) {
                 randElem = Math.floor(Math.random() * lastElemIndex);
-                temp = this.cards[lastElemIndex].image;
-                this.cards[lastElemIndex].image = this.cards[randElem].image;
-                this.cards[randElem].image = temp;
+                temp = this.tilesDivs[lastElemIndex];
+                this.tilesDivs[lastElemIndex] = this.tilesDivs[randElem];
+                this.tilesDivs[randElem] = temp;
+                let imageConstruct = "url('" + this.images["img" + Math.floor(lastElemIndex / 2 + 1)] + "'), linear-gradient(-35deg, #444444, #000000)";
 
-                $(this.cards[lastElemIndex].div).css("background-image", `url(${this.cards[lastElemIndex].image})`);
+                $(this.tilesDivs[lastElemIndex]).data("image", imageConstruct);
+                $(this.tilesDivs[lastElemIndex]).data("number", lastElemIndex);
             }
 
 
@@ -73,21 +88,12 @@ $(function () {
 
     }
 
-
-
     let board = document.querySelector(".game-board");
     let tilesDivs = document.querySelectorAll(".grid-item");
 
     let game = new Game(board, tilesDivs);
 
-    game.assignImages();
     game.shuffleCards();
-
-
-    console.log(game);
-
-
-
-
+    game.newGame();
 
 })
