@@ -19,6 +19,7 @@ $(function () {
             this.pickedPair = [];
             this.pairsClickedCounter = 0;
             this.pairsGuessedCounter = 0;
+            this.selectable = true;
             this.images = {
                 img1: "img/PNG/2.png",
                 img2: "img/PNG/3.png",
@@ -35,24 +36,30 @@ $(function () {
         newGame() {
 
             let pickedPair = this.pickedPair;
+            let selectable = this.selectable;
 
             $(".grid-item").click(function () {
 
-                $(this).css("background-image", $(this).data("image"));
+                if (selectable == true) {
+                    $(this).css("background-image", $(this).data("image"));
 
-                pickedPair.push($(this));
+                    pickedPair.push($(this));
 
-                if ($(pickedPair[0]).data("number") === $(this).data("number") && pickedPair.length === 2) {
-                    pickedPair.pop();
+                    if ($(pickedPair[0]).data("number") === $(this).data("number") && pickedPair.length === 2) {
+                        pickedPair.pop();
+                    }
                 }
 
-                if (pickedPair.length === 2 && $(pickedPair[0]).data("image") !== $(pickedPair[1]).data("image")) {
+                if (pickedPair.length === 2 && selectable == true && $(pickedPair[0]).data("image") !== $(pickedPair[1]).data("image")) {
+
+                    selectable = false;
 
                     setTimeout(function () {
 
                         $(pickedPair[0]).removeAttr("style");
                         $(pickedPair[1]).removeAttr("style");
-                        pickedPair = []
+                        pickedPair = [];
+                        selectable = true;
 
                     }, 250);
 
