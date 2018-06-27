@@ -39,7 +39,10 @@ $(function () {
         newGame() {
             $(".game-board").empty();
             this.tilesDivs.length = 0;
+            $(".counter").hide();
             $("select").show();
+            $("select option:first-child").prop("selected", "selected");
+            $(".game-board").prop("style", "");
             this.createBoard();
         }
 
@@ -47,7 +50,7 @@ $(function () {
 
             let that = this;
 
-            // $("select").unbind("change"); this or the one below - uncomment (jQuery bug?)
+            $("select").off("change"); // this or the one below - uncomment (jQuery bug?)
             $("select").change(function (e) {
                 // e.stopImmediatePropagation();
                 let element = '<div class="grid-item"></div>';
@@ -58,7 +61,8 @@ $(function () {
                 $(this).hide();
                 $(".game-board").css("grid-template-columns", `repeat(${sideElemsCount}, ${sideElemSize})`);
                 $(".game-board").css("grid-template-rows", `repeat(${sideElemsCount}, ${sideElemSize})`);
-                $("select").after("<h1>" + that.pairsClickedCounter + "</h1>");
+                $(".counter").show();
+                $(".moves").text(that.pairsClickedCounter);
 
                 for (let i = 0; i < difficulty; i++) {
                     $(".game-board").append(element);
