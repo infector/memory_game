@@ -5,14 +5,13 @@ $(function () {
     class Game {
 
         constructor() {
-            // this.board = board;
             this.tilesDivs = [];
-            // this.tileBack = $(".grid-item").css("background-color");
             this.pickedPair = [];
+            this.difficultyValue;
             this.pairsClickedCounter = 0;
             this.pairsGuessedCounter = 0;
             this.selectable = true;
-            this.difficulty = "";
+            this.difficultyValue = "";
             this.images = {
                 img1: "img/PNG/2.png",
                 img2: "img/PNG/3.png",
@@ -39,6 +38,9 @@ $(function () {
         newGame() {
             $(".game-board").empty();
             this.tilesDivs.length = 0;
+            this.pairsClickedCounter = 0;
+            this.pairsGuessedCounter = 0;
+            this.pickedPair.length = 0;
             $(".counter").hide();
             $("select").show();
             $("select option:first-child").prop("selected", "selected");
@@ -50,21 +52,21 @@ $(function () {
 
             let that = this;
 
-            $("select").off("change"); // this or the one below - uncomment (jQuery bug?)
+            $("select").off("change");
             $("select").change(function (e) {
-                // e.stopImmediatePropagation();
                 let element = '<div class="grid-item"></div>';
                 let createdDiv;
-                let difficulty = parseInt($("select").val());
-                let sideElemsCount = Math.sqrt(difficulty);
+                that.difficultyValue = parseInt($("select").val());
+                let sideElemsCount = Math.sqrt(that.difficultyValue);
                 let sideElemSize = 60 / sideElemsCount + "vmin";
                 $(this).hide();
                 $(".game-board").css("grid-template-columns", `repeat(${sideElemsCount}, ${sideElemSize})`);
                 $(".game-board").css("grid-template-rows", `repeat(${sideElemsCount}, ${sideElemSize})`);
                 $(".counter").show();
-                $(".moves").text(that.pairsClickedCounter);
+                $(".counter .moves").text(that.pairsClickedCounter);
+                $(".counter .score").text(that.pairsGuessedCounter);
 
-                for (let i = 0; i < difficulty; i++) {
+                for (let i = 0; i < that.difficultyValue; i++) {
                     $(".game-board").append(element);
                     createdDiv = $(".game-board").children(".grid-item").eq(i);
                     that.tilesDivs.push(createdDiv);
@@ -78,9 +80,12 @@ $(function () {
 
         startGameMechanics() {
 
-            // let pickedPair = this.pickedPair;
-            // let selectable = this.selectable;
             let that = this;
+
+            $("#reset").off("click");
+            $("#reset").click(function () {
+                that.newGame();
+            });
 
             $(".grid-item").click(function () {
                 if (that.selectable === true) {
@@ -104,20 +109,25 @@ $(function () {
                         that.pickedPair.length = 0;
                         that.selectable = true;
                         that.pairsClickedCounter++;
-                        $("h1").text(that.pairsClickedCounter);
+                        $(".counter .moves").text(that.pairsClickedCounter);
                     }, 500);
-                    // console.log(that.pairsClickedCounter);
 
                 } else if (that.pickedPair.length === 2 && $(that.pickedPair[0]).data("image") === $(that.pickedPair[1]).data("image")) {
 
                     $(that.pickedPair[0]).off("click");
                     $(that.pickedPair[1]).off("click");
                     that.pickedPair.length = 0;
+                    that.pairsGuessedCounter++;
+                    $(".counter .score").text(that.pairsGuessedCounter);
                     that.pairsClickedCounter++;
-                    // console.log(that.pairsClickedCounter);
+                    $(".counter .moves").text(that.pairsClickedCounter);
                 }
 
-            })
+                if ((that.difficultyValue % 2 === 0 && that.pairsGuessedCounter * 2 === that.difficultyValue) ||
+                    (that.difficultyValue % 2 !== 0 && that.pairsGuessedCounter * 2 === that.difficultyValue - 1)) {
+                    // that.endGame();
+                }
+            });
 
         }
 
@@ -125,12 +135,10 @@ $(function () {
             let that = this;
             let randElem;
             let temp;
-            $("button").click(function() {
-                that.newGame();
-                })
+
             for (let lastElemIndex = this.tilesDivs.length - 1; lastElemIndex >= 0; lastElemIndex--) {
                 randElem = Math.floor(Math.random() * lastElemIndex);
-                temp = this.tilesDivs[lastElemIndex];
+                temp = this.tilesDivs[lastElemIndex]; // Fischer-Yates shuffle
                 this.tilesDivs[lastElemIndex] = this.tilesDivs[randElem];
                 this.tilesDivs[randElem] = temp;
                 let imageConstruct = "url('" + this.images["img" + Math.floor(lastElemIndex / 2 + 1)] + "'), linear-gradient(-35deg, #444444, #000000)";
@@ -142,10 +150,11 @@ $(function () {
 
         }
 
-    }
+        // endGame() {
+        //     $("#reset").append("<div style='position: absolute; font-size: 3rem; color: red; left: 8vmin;'>CONGRATULATIONS!</div>");
+        // }
 
-    // let board = document.querySelector(".game-board");
-    // let tilesDivs = document.querySelectorAll(".grid-item");
+    }
 
     let game = new Game();
 
