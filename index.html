@@ -16,23 +16,19 @@
 <body>
 
     <div class="grid-container game-board">
-        <div class="grid-item">1</div>
-        <div class="grid-item">2</div>
-        <div class="grid-item">3</div>
-        <div class="grid-item">4</div>
-        <div class="grid-item">5</div>
-        <div class="grid-item">6</div>
-        <div class="grid-item">7</div>
-        <div class="grid-item">8</div>
-        <div class="grid-item">9</div>
-        <div class="grid-item">10</div>
-        <div class="grid-item">11</div>
-        <div class="grid-item">12</div>
-        <div class="grid-item">13</div>
-        <div class="grid-item">14</div>
-        <div class="grid-item">15</div>
-        <div class="grid-item">16</div>
+
     </div>
+
+    <select>
+        <option selected disabled hidden>Choose your difficulty level</option>
+        <option value="9">EASY</option>
+        <option value="16">MEDIUM</option>
+        <option value="25">HARD</option>
+        <option value="36">LEGENDARY</option>
+    </select>
+    <button id="reset" type="button">RESET GAME</button>
+    <div class="counter">Pairs clicked: <div class="moves"></div></div>
+    <div class="counter">Pairs guessed: <div class="score"></div></div>
 
 </body>
 
